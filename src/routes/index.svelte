@@ -15,7 +15,7 @@
 	let genres = [];
 	let currentPage = 1;
 	let loading = true;
-	const onKeyPress = (event) => {
+	const onKeyPress = () => {
 		currentPage = 1;
 		search();
 	};
