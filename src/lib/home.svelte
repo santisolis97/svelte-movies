@@ -1,7 +1,7 @@
 <script>
 	export const prerender = true;
 	import './home.css';
-
+	import Rating from '$lib/Rating.svelte';
 	import logo from '../images/logo.svg';
 	import { onMount } from 'svelte';
 	import MovieCard from '$lib/movieCard.svelte';
@@ -12,14 +12,38 @@
 	let inputMovie = '';
 	let data = [];
 	let movies = [];
+	let moviesResults = [];
 	let genres = [];
+	let isLastPage;
+	let isFirstPage;
 	let currentPage = 1;
 	let loading = true;
+	let totalPages = 1;
+	let rate = 0;
+	let ratingRanges = {
+		0: [0, 10],
+		1: [0, 2],
+		2: [2.01, 4],
+		3: [4.01, 6],
+		4: [6.01, 8],
+		5: [8.01, 10]
+	};
+	let ratingFilter = ratingRanges[0];
 	const onKeyPress = () => {
-		currentPage = 1;
 		search();
 	};
-	$: currentPage, search();
+	$: (currentPage, ratingFilter) && search();
+	$: ratingFilter = ratingRanges[rate];
+	$: isLastPage = currentPage === totalPages;
+	$: isFirstPage = currentPage === 1;
+	const handleCurrentPage = (moreorless) => {
+		if (moreorless === 'more') {
+			currentPage += 1;
+		}
+		if (moreorless === 'less') {
+			currentPage -= 1;
+		}
+	};
 	const search = async () => {
 		loading = true;
 		if (inputMovie === '') {
@@ -29,19 +53,36 @@
 				`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${inputMovie}&page=${currentPage}&include_adult=true`
 			);
 			data = await res.json();
-
-			movies = data.results;
+			totalPages = data.total_pages;
+			console.log(totalPages);
+			console.log(ratingFilter);
+			moviesResults = data.results;
+			movies = moviesResults.filter((element) => {
+				return (
+					parseFloat(element.vote_average) >= parseFloat(ratingFilter[0]) &&
+					parseFloat(element.vote_average) <= parseFloat(ratingFilter[1])
+				);
+			});
 		}
 		loading = false;
 	};
 	const getMovies = async () => {
+		console.log(ratingFilter);
 		loading = true;
 		const res = await fetch(
 			`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${currentPage}`
 		);
 		data = await res.json();
+		totalPages = data.total_pages;
+		moviesResults = data.results;
+		console.log(totalPages);
+		movies = moviesResults.filter((element) => {
+			return (
+				parseFloat(element.vote_average) >= parseFloat(ratingFilter[0]) &&
+				parseFloat(element.vote_average) <= parseFloat(ratingFilter[1])
+			);
+		});
 
-		movies = data.results;
 		if (res.ok) {
 			return movies;
 		}
@@ -86,6 +127,9 @@
 			<Fa icon={faSearch} size="sm" color="#F83D00" />
 		</div>
 	</div>
+	<div class="ratingFilter">
+		<span>Stars filter:</span><Rating bind:rating={rate} />
+	</div>
 </div>
 <div class="moviesList">
 	{#await genres then value}
@@ -103,19 +147,17 @@
 			{/each}
 			<div class="pagesNavigator">
 				<button
+					disabled={isFirstPage}
 					class="navigatorButton clickable"
-					on:click={() => {
-						currentPage--;
-					}}
+					on:click={() => handleCurrentPage('less')}
 				>
 					{'<'}</button
 				>
-				<button class="navigatorButton"> {currentPage}</button>
+				<button class="navigatorButton">{currentPage}</button>
 				<button
+					disabled={isLastPage}
 					class="navigatorButton clickable"
-					on:click={() => {
-						currentPage++;
-					}}
+					on:click={() => handleCurrentPage('more')}
 					>{'>'}
 				</button>
 			</div>

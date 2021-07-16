@@ -26,7 +26,10 @@
 				{/if}
 				<h1>{title}</h1>
 				<h4>{release}</h4>
-				<StarRating rating={rate / 2} />
+				<div class="rate">
+					<StarRating rating={rate / 2} />
+					{rate}
+				</div>
 				<p class="type">
 					{#each genresList as genre, index}
 						{#if index + 1 < genresList.length}
@@ -99,7 +102,9 @@
 		color: #555;
 		font-weight: 400;
 	}
-
+	.rate {
+		display: flex;
+	}
 	.movie_card .info_section .movie_header .type {
 		display: inline-block;
 		color: #959595;

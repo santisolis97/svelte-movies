@@ -62,9 +62,24 @@
 	}
 	.navigatorButton.clickable {
 		cursor: pointer;
+	}	
+	.navigatorButton.clickable:disabled {
+		opacity:.5
 	}
 	.loader {
 		margin: 0 auto;
 		width: fit-content;
 		/* padding: 200px 0; */
+	}
+	.ratingFilter{
+		display: flex;
+		align-items:center;
+		height: 30px;
+		border-radius: 20px;
+		background:white;
+		padding: 5px 10px;
+		margin: 10px auto;
+		border: none;
+		box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+		color:#585858;
 	}
