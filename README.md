@@ -2,19 +2,9 @@
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
 
-## Creating a project
+## Project description
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
-```
-
-> Note: the `@next` is temporary
+This is just a training project that shows you the top ranked movies and their details based on [`TMDb API`](https://www.themoviedb.org/) and allows you to search for any movie on their DB and get its details.
 
 ## Developing
 
