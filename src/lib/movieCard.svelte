@@ -99,6 +99,7 @@
 		color: #555;
 		font-weight: 400;
 	}
+
 	.movie_card .info_section .movie_header .type {
 		display: inline-block;
 		color: #959595;

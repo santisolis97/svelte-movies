@@ -17,9 +17,7 @@
 	let loading = true;
 	const onKeyPress = (event) => {
 		currentPage = 1;
-		if (event.keyCode === 13) {
-			search();
-		}
+		search();
 	};
 	$: currentPage, search();
 	const search = async () => {
@@ -74,9 +72,13 @@
 	</div>
 	<div class="inputDiv">
 		<input
+			on:keyup|preventDefault={(event) => {
+				if (event.keyCode === 13) {
+					onKeyPress();
+				}
+			}}
 			bind:value={inputMovie}
 			class="movies-input"
-			on:keypress={onKeyPress}
 			placeholder={'Enter movie title and press enter '}
 			type="text"
 		/>
