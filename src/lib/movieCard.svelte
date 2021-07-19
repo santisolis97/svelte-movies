@@ -1,12 +1,14 @@
 <script>
 	import StarRating from 'svelte-star-rating';
 	import noposter from '../images/noposter.png';
+	export let id;
 	export let title;
 	export let overview;
 	export let poster;
 	export let backdrop;
 	export let release;
 	export let rate;
+	let data;
 	// export let genres;
 	export let genresList;
 </script>
@@ -24,20 +26,22 @@
 				{:else}
 					<img class="locandina" src={noposter} alt="movieImage" />
 				{/if}
-				<h1>{title}</h1>
+				<a href={`/movie/${id}`} sveltekit:prefetch><h1>{title}</h1></a>
 				<h4>{release}</h4>
 				<div class="rate">
 					<StarRating rating={rate / 2} />
 					{rate}
 				</div>
 				<p class="type">
-					{#each genresList as genre, index}
-						{#if index + 1 < genresList.length}
-							{genre.name + ', '}
-						{:else}
-							{genre.name + '.'}
-						{/if}
-					{/each}
+					{#if genresList}
+						{#each genresList as genre, index}
+							{#if index + 1 < genresList.length}
+								{genre.name + ', '}
+							{:else}
+								{genre.name + '.'}
+							{/if}
+						{/each}
+					{/if}
 				</p>
 			</div>
 			<div class="movie_desc">

@@ -54,8 +54,6 @@
 			);
 			data = await res.json();
 			totalPages = data.total_pages;
-			console.log(totalPages);
-			console.log(ratingFilter);
 			moviesResults = data.results;
 			movies = moviesResults.filter((element) => {
 				return (
@@ -67,7 +65,6 @@
 		loading = false;
 	};
 	const getMovies = async () => {
-		console.log(ratingFilter);
 		loading = true;
 		const res = await fetch(
 			`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${currentPage}`
@@ -75,7 +72,6 @@
 		data = await res.json();
 		totalPages = data.total_pages;
 		moviesResults = data.results;
-		console.log(totalPages);
 		movies = moviesResults.filter((element) => {
 			return (
 				parseFloat(element.vote_average) >= parseFloat(ratingFilter[0]) &&
@@ -136,6 +132,7 @@
 		{#if !loading}
 			{#each movies as movie}
 				<MovieCard
+					id={movie.id}
 					title={movie.title}
 					overview={movie.overview}
 					poster={movie.poster_path}
